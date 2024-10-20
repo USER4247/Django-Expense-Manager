@@ -1,18 +1,21 @@
-# Django-Expense-Manager
-this repository contains a simple expense manager project created using django python
+# Django Expense Manager
 
-Documentation :-
-Project uses 3 django apps named 
-  1> Default (shows default views and home page)
-  2> ManageUsers (app helps to manage users)
-  3> ExpenseManager (app contains a dashboard which can split and download csv files)
+This repository contains a simple expense manager project created using Django and Python.
 
-Features :-
-  1> Authentication and authorisation
-    You can sign-in/sign-up and access dashboard
-  2> View User data 
-    You can view all user data which contains user name , mail and phone number from sqlite3 database . 
-    It uses pagination and shows 10 results per page .
-    Please note , this feature does not require any authorisation . 
-  3> Dashboard
-    Dashboard to do operations ie split by (equal , partitions and percentage.....)
+## Documentation
+
+The project uses three Django apps:
+1. **Default**: Shows default views and the home page.
+2. **ManageUsers**: Helps to manage users.
+3. **ExpenseManager**: Contains a dashboard that can split and download CSV files.
+
+## Features
+
+1. **Authentication and Authorization**  
+   You can sign in/sign up and access the dashboard.
+  
+2. **View User Data**  
+   You can view all user data, which contains user name, email, and phone number from the SQLite3 database. It uses pagination and shows 10 results per page. Please note that this feature does not require any authorization.
+
+3. **Dashboard**  
+   Dashboard to perform operations, such as splitting by equal, partitions, and percentage.
