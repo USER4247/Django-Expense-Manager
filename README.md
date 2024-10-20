@@ -7,7 +7,7 @@ This repository contains a simple expense manager project created using Django a
 The project uses three Django apps:
 1. **Default**: Shows default views and the home page.
 2. **ManageUsers**: Helps to manage users.
-3. **ExpenseManager**: Contains a dashboard that can split and download CSV files.
+3. **ExpenseManager**: Contains a dashboard that can split an ammount and download CSV files.
 
 ## Features
 
