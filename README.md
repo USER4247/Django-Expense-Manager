@@ -19,3 +19,9 @@ The project uses three Django apps:
 
 3. **Dashboard**  
    Dashboard to perform operations, such as splitting by equal, partitions, and percentage.
+
+## Test Credentials
+
+For testing, you can sign in with the following credentials:
+- **Email**: `test1@gmail.com`
+- **Password**: `123456`
