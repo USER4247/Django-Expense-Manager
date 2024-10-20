@@ -16,5 +16,3 @@ Features :-
     Please note , this feature does not require any authorisation . 
   3> Dashboard
     Dashboard to do operations ie split by (equal , partitions and percentage.....)
-    
-    
