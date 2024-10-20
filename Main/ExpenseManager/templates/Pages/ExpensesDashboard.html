@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Splitter</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            padding-top: 60px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            justify-content: space-between;
+        }
+        .column {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            margin: 10px;
+        }
+        .column h2 {
+            text-align: center;
+        }
+        .expandable-content {
+            display: none;
+        }
+        .csv_button {
+            background-color: #55d6aa !important;
+            padding: 10px 20px !important;
+            border: none !important;
+            border-radius: 5px !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+            transition: background-color 0.3s ease !important;
+        }
+        .column button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4158d0;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .column button:hover {
+            background-color: #c850c0;
+        }
+        .field {
+            margin: 10px 0;
+        }
+        .field label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .field input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        header {
+            background: #55d6aa;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav li {
+            display: inline;
+            margin-left: 20px;
+        }
+        nav li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 8px 15px;
+            background-color: #4158d0;
+            border-radius: 5px;
+        }
+        nav li a:hover {
+            background-color: #c850c0;
+        }
+        
+    </style>
+</head>
+<body>
+<header>
+    <div class = "navbar">
+        <nav>
+            <ul>
+                <li><a href = 'logOut'>Log Out</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="container">
+
+    <!-- Column 1: Equal Split -->
+    <div class="column">
+        <h2>Equal Split</h2>
+        <button onclick="toggleVisibility('equal')">Expand</button>
+        <div class="expandable-content" id="equal">
+            <div class="field">
+                <label for="equal-amount">Total Amount:</label>
+                <input type="number" id="equal-amount" placeholder="Enter total amount" required>
+            </div>
+            <div class="field">
+                <label for="equal-participants">Number of Participants:</label>
+                <input type="number" id="equal-participants" placeholder="Enter number of participants" required>
+            </div>
+            <button onclick="calculateEqual()">Calculate</button>
+            <div class="result" id="equal-result"></div>
+
+            <button class = "csv_button" onclick="submitEqual()">Download csv</button>
+
+        </div>
+    </div>
+
+    <!-- Column 2: Exact Split -->
+    <div class="column">
+        <h2>Exact Split</h2>
+        <button onclick="toggleVisibility('exact')">Expand</button>
+        <div class="expandable-content" id="exact">
+            <div class="field">
+                <label for="exact-amount">Total Amount:</label>
+                <input type="number" id="exact-amount" placeholder="Enter total amount" required>
+            </div>
+            <div class="field">
+                <label for="exact-people">Enter exact amounts for each participant (comma-separated):</label>
+                <input type="text" id="exact-people" placeholder="e.g. 100, 50, 200">
+            </div>
+            <button onclick="calculateExact()">Calculate</button>
+            <div class="result" id="exact-result"></div>
+
+            <button class = "csv_button" onclick="submitExact()">Download csv</button>
+        </div>
+    </div>
+
+    <!-- Column 3: Percentage Split -->
+    <div class="column">
+        <h2>Percentage Split</h2>
+        <button onclick="toggleVisibility('percentage')">Expand</button>
+        <div class="expandable-content" id="percentage">
+            <div class="field">
+                <label for="percentage-amount">Total Amount:</label>
+                <input type="number" id="percentage-amount" placeholder="Enter total amount" required>
+            </div>
+            <div class="field">
+                <label for="percentage-values">Enter percentages for each participant (comma-separated):</label>
+                <input type="text" id="percentage-values" placeholder="e.g. 30, 40, 30">
+            </div>
+            <button onclick="calculatePercentage()">Calculate</button>
+            <div class="result" id="percentage-result"></div>
+
+            <button class = "csv_button" onclick="submitPercentage()">Download csv</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+   
+    function toggleVisibility(id) {
+        var content = document.getElementById(id);
+        if (content.style.display === "none" || content.style.display === "") {
+            content.style.display = "block";
+        } else {
+            content.style.display = "none";
+        }
+    }
+
+    function calculateEqual(k = false) {
+        var amount = parseFloat(document.getElementById('equal-amount').value);
+        var participants = parseInt(document.getElementById('equal-participants').value);
+        if (amount > 0 && participants > 0) {
+            var splitAmount = (amount / participants).toFixed(2);
+            document.getElementById('equal-result').innerHTML = "Each participant pays: $" + splitAmount;
+            if(k){
+                return [splitAmount , participants]
+            }
+        } else {
+            document.getElementById('equal-result').innerHTML = "Please enter valid values.";
+        }
+    }
+
+    function calculateExact(k = false) {
+        var totalAmount = parseFloat(document.getElementById('exact-amount').value);
+        var exactAmounts = document.getElementById('exact-people').value.split(',').map(Number);
+        var totalEntered = exactAmounts.reduce((a, b) => a + b, 0);
+        if (totalEntered === totalAmount) {
+            document.getElementById('exact-result').innerHTML = "Split successful: " + exactAmounts.join(", ");
+            if(k){
+                return exactAmounts
+            }
+        } else {
+            document.getElementById('exact-result').innerHTML = "Amounts do not sum to the total amount.";
+        }
+    }
+
+    function calculatePercentage(k=false) {
+        var totalAmount = parseFloat(document.getElementById('percentage-amount').value);
+        var percentages = document.getElementById('percentage-values').value.split(',').map(Number);
+        var percentageSum = percentages.reduce((a, b) => a + b, 0);
+        if (percentageSum === 100) {
+            var amounts = percentages.map(function(p) {
+                return (totalAmount * (p / 100)).toFixed(2);
+            });
+            document.getElementById('percentage-result').innerHTML = "Each pays: " + amounts.join(", ");
+            if(k){
+                return amounts
+            }
+        } else {
+            document.getElementById('percentage-result').innerHTML = "Percentages must add up to 100.";
+        }
+    }
+
+    function submitEqual() {
+        var p = calculateEqual(k=true)
+        if(p==undefined){
+            return
+        }
+        var total = parseFloat(document.getElementById('equal-amount').value);
+        console.log(p[0],p[1])
+        _generateCSV(p[0],total,p[1])
+    }
+
+    function submitExact() {
+        var p = calculateExact(k=true)
+        if(p==undefined){
+            return
+        }
+        var total = parseFloat(document.getElementById('exact-amount').value);
+        console.log(p)
+        _generateCSV(p,total)
+    }
+
+    function submitPercentage() {
+        var p = calculatePercentage(k=true)
+        if(p==undefined){
+            return
+        }
+        var total = parseFloat(document.getElementById('percentage-amount').value);
+        console.log(p)
+        //alert('Percentage split submitted!');
+        _generateCSV(p,total)
+    }
+
+    function _generateCSV(input,total,participants=0){
+        var user = 'Person '
+        var rows = []
+        if(Array.isArray(input)){
+            counter = 1
+            cols = []    
+            values = []
+            for (let i = 0; i < input.length; i++) {
+                console.log(input[i]); 
+                cols.push(user+counter.toString())
+                values.push(input[i])
+                counter+=1
+            }
+            rows = [
+                cols,
+                values,
+                ["total",total]
+            ];
+            
+        }
+        else{
+            input = parseFloat(input)
+            participants = parseInt(participants)
+            cols = []    
+            values = []
+            for(let i = 1 ; i<=participants;i++){
+                cols.push(user+i.toString())
+                values.push(input)
+            }
+            rows = [
+                cols,
+                values,
+                ["total",total]
+            ];
+        }
+        _getCSV(rows)
+    }
+
+    function _getCSV(rows){
+        let csvContent = "data:text/csv;charset=utf-8,";
+        rows.forEach(function(rowArray) {
+            let row = rowArray.join(",");
+            csvContent += row + "\r\n";
+        });
+        var encodedUri = encodeURI(csvContent);
+        window.open(encodedUri);
+    }
+
+
+</script>
+
+</body>
+</html>

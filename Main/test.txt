@@ -1,0 +1,9 @@
+http://127.0.0.1:8000/admin/
+
+http://127.0.0.1:8000/manageUsers/addUser
+
+http://127.0.0.1:8000/manageUsers/loginUser
+
+http://127.0.0.1:8000/manageExpense/userDashboard
+
+http://127.0.0.1:8000/manageUsers/user_list

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <style>
+        body, h1 {
+            font-family: "Raleway", sans-serif;
+        }
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .bgimg {
+            background-image: url('https://i.redd.it/glyffr63wot71.gif');
+            min-height: 100%;
+            background-position: center;
+            background-size: cover;
+        }
+        nav {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+        nav button {
+            background-color: #55d6aa;
+            color: white; 
+            border: none; 
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s; 
+        }
+        nav button:hover {
+            background-color: #c850c0; 
+            color: white;
+        }
+    </style>
+</head>
+<body class="bgimg">
+    <nav>
+        <a href="{% url 'redirectToSignIn' %}">
+            <button>Sign in</button>
+        </a>
+        <a href="{% url 'redirectToSignUp' %}">
+            <button>Sign up</button>
+        </a>
+        <a href="{% url 'redirectToShowDetails' %}">
+            <button>Show User Details</button>
+        </a>
+        <a href="{% url 'redirectToDashboard' %}">
+            <button>Dashboard</button>
+        </a>
+    </nav>
+</body>
+</html>
